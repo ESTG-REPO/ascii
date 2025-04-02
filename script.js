@@ -43,12 +43,12 @@ const CHARSETS = {
 
 // Sample images for the gallery
 const SAMPLE_IMAGES = [
-  { name: 'Horse', url: 'https://i.ibb.co/chHSSFQ/horse.png' },
-  { name: 'Mountain', url: 'https://i.imgur.com/eIQhwfU.jpg' },
-  { name: 'Portrait', url: 'https://i.imgur.com/q9HiQ2C.jpg' },
-  { name: 'Building', url: 'https://i.imgur.com/QngM8xP.jpg' },
-  { name: 'Cat', url: 'https://i.imgur.com/SRgQQR6.jpg' },
-  { name: 'Abstract', url: 'https://i.imgur.com/mWj31ft.jpg' }
+  { name: 'Horse', url: 'https://pub-c9ed83de1a6d4641b28dca4662576f19.r2.dev/%24R0CWCA5.png' },
+  { name: 'Mountain', url: 'https://pub-c9ed83de1a6d4641b28dca4662576f19.r2.dev/%24R5IAD1W.png' },
+  { name: 'Portrait', url: 'https://pub-c9ed83de1a6d4641b28dca4662576f19.r2.dev/%24RA8ETZN.png' },
+  { name: 'Building', url: 'https://pub-c9ed83de1a6d4641b28dca4662576f19.r2.dev/%24RAFGL98.png' },
+  { name: 'Cat', url: 'https://pub-c9ed83de1a6d4641b28dca4662576f19.r2.dev/%24RR23TB9.png' },
+  { name: 'Abstract', url: 'https://pub-c9ed83de1a6d4641b28dca4662576f19.r2.dev/%24RFJ4ZS5.png' }
 ];
 
 // Preset configurations
