@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Convert images to ASCII art with customizable settings like dithering, edge detection, and more">
+  <meta name="keywords" content="ASCII art, image conversion, edge detection, dithering">
+  <meta name="author" content="ASCII Art Generator">
+  <title>ASCII Art Generator</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar Toggle Button for Mobile -->
+  <button id="sidebarToggle" class="btn btn-primary d-md-none position-fixed" style="z-index:1050; top:10px; left:10px;">
+    <i class="fas fa-sliders-h"></i>
+  </button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <header class="sidebar-header">
+      <h1 class="mb-4">ASCII Art Generator</h1>
+      <div class="d-flex justify-content-between align-items-center">
+        <button id="helpBtn" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#helpModal">
+          <i class="fas fa-question-circle"></i> Help
+        </button>
+        <button id="toggleTheme" class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Settings Form -->
+    <form id="settingsForm">
+      <section class="control-group global-settings">
+        <h3>Global Settings</h3>
+        <div class="control">
+          <label for="theme">Theme:</label>
+          <select id="theme" class="form-select">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="ignoreWhite">Ignore Pure White:</label>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="ignoreWhite" checked>
+          </div>
+        </div>
+      </section>
+      
+      <section class="control-group upload-group">
+        <h3>1. Upload Your File</h3>
+        <div class="control">
+          <div class="upload-area" id="dropZone">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Drag & drop image or</p>
+            <input type="file" id="upload" accept="image/*" class="form-control">
+          </div>
+        </div>
+        <!-- Sample Images Gallery -->
+        <div class="sample-images mt-2">
+          <p>Or try a sample image:</p>
+          <div class="sample-thumbnails d-flex flex-wrap gap-1">
+            <!-- Sample images will be added here by JavaScript -->
+          </div>
+        </div>
+      </section>
+      
+      <section class="control-group image-processing">
+        <h3>2. Basic Adjustments</h3>
+        <div class="control">
+          <label for="asciiWidth">Output Width (chars):</label>
+          <input type="range" class="form-range" id="asciiWidth" min="20" max="300" value="150">
+          <span class="value-label" id="asciiWidthVal">150</span>
+        </div>
+        <div class="control">
+          <label for="brightness">Brightness:</label>
+          <input type="range" class="form-range" id="brightness" min="-100" max="100" value="0">
+          <span class="value-label" id="brightnessVal">0</span>
+        </div>
+        <div class="control">
+          <label for="contrast">Contrast:</label>
+          <input type="range" class="form-range" id="contrast" min="-100" max="100" value="0">
+          <span class="value-label" id="contrastVal">0</span>
+        </div>
+        <div class="control">
+          <label for="blur">Blur (px):</label>
+          <input type="range" class="form-range" id="blur" min="0" max="10" step="0.01" value="0">
+          <span class="value-label" id="blurVal">0</span>
+        </div>
+        <div class="control">
+          <label for="invert">Invert Colors:</label>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="invert">
+          </div>
+        </div>
+      </section>
+      
+      <section class="control-group dithering-settings">
+        <h3>3. Dithering Options</h3>
+        <div class="control">
+          <label for="dithering">Enable Dithering:</label>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="dithering" checked>
+          </div>
+        </div>
+        <div class="control">
+          <label for="ditherAlgorithm">Dither Algorithm:</label>
+          <select id="ditherAlgorithm" class="form-select">
+            <option value="floyd" selected>Floyd–Steinberg</option>
+            <option value="atkinson">Atkinson</option>
+            <option value="noise">Noise</option>
+            <option value="ordered">Ordered</option>
+          </select>
+        </div>
+      </section>
+      
+      <section class="control-group charset-settings">
+        <h3>4. Character Set</h3>
+        <div class="control">
+          <label for="charset">Select Set:</label>
+          <select id="charset" class="form-select">
+            <option value="detailed" selected>Detailed</option>
+            <option value="standard">Standard</option>
+            <option value="blocks">Blocks</option>
+            <option value="binary">Binary</option>
+            <option value="hex">Hex</option>
+            <option value="manual">Manual</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="control" id="manualCharControl" style="display: none;">
+          <label for="manualCharInput">Manual Character:</label>
+          <input type="text" class="form-control" id="manualCharInput" maxlength="1" value="0">
+        </div>
+        <div class="control" id="customCharsetControl" style="display: none;">
+          <label for="customCharsetInput">Custom Character Set:</label>
+          <input type="text" class="form-control" id="customCharsetInput" placeholder="Enter characters from dark to light">
+        </div>
+        <div class="control">
+          <label for="colorized">Colorized Output:</label>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="colorized">
+          </div>
+        </div>
+        <div id="colorControls" style="display: none;" class="mt-2">
+          <div class="control">
+            <label for="textColor">Text Color:</label>
+            <input type="color" class="form-control form-control-color" id="textColor" value="#ffffff">
+          </div>
+          <div class="control">
+            <label for="bgColor">Background Color:</label>
+            <input type="color" class="form-control form-control-color" id="bgColor" value="#000000">
+          </div>
+        </div>
+      </section>
+      
+      <section class="control-group font-settings">
+        <h3>Font Settings</h3>
+        <div class="control">
+          <label for="fontFamily">Font Family:</label>
+          <select id="fontFamily" class="form-select">
+            <option value="monospace" selected>Monospace</option>
+            <option value="consolas">Consolas</option>
+            <option value="courier">Courier</option>
+            <option value="monaco">Monaco</option>
+          </select>
+        </div>
+      </section>
+      
+      <section class="control-group edge-detection-settings">
+        <h3>5. Edge Detection</h3>
+        <p>Select one edge detection method:</p>
+        <div class="control">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="edgeMethod" id="edgeNone" value="none" checked>
+            <label class="form-check-label" for="edgeNone">No Edge Detection</label>
+          </div>
+        </div>
+        <div class="control">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="edgeMethod" id="edgeSobel" value="sobel">
+            <label class="form-check-label" for="edgeSobel">Sobel Edge Detection</label>
+          </div>
+        </div>
+        <div class="control">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="edgeMethod" id="edgeDoG" value="dog">
+            <label class="form-check-label" for="edgeDoG">DoG (Contour) Detection</label>
+          </div>
+        </div>
+        <div class="control" id="sobelThresholdControl" style="display: none;">
+          <label for="edgeThreshold">Sobel Threshold:</label>
+          <input type="range" class="form-range" id="edgeThreshold" min="0" max="255" value="100">
+          <span class="value-label" id="edgeThresholdVal">100</span>
+        </div>
+        <div class="control" id="dogThresholdControl" style="display: none;">
+          <label for="dogEdgeThreshold">DoG Threshold:</label>
+          <input type="range" class="form-range" id="dogEdgeThreshold" min="0" max="255" value="100">
+          <span class="value-label" id="dogEdgeThresholdVal">100</span>
+        </div>
+      </section>
+      
+      <section class="control-group display-settings">
+        <h3>6. Display Settings</h3>
+        <div class="control">
+          <label for="zoom">Zoom (%):</label>
+          <input type="range" class="form-range" id="zoom" min="20" max="600" value="100">
+          <span class="value-label" id="zoomVal">100</span>
+        </div>
+      </section>
+      
+      <section class="control-group preset-settings">
+        <h3>Presets</h3>
+        <div class="control">
+          <label for="presets">Load Preset:</label>
+          <select id="presets" class="form-select">
+            <option value="default" selected>Default</option>
+            <option value="sketch">Sketch</option>
+            <option value="minimalist">Minimalist</option>
+            <option value="detailed">Detailed</option>
+            <option value="blocky">Blocky</option>
+          </select>
+        </div>
+        <div class="control mt-2">
+          <label for="savePresetName">Save Current Settings:</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="savePresetName" placeholder="Preset name">
+            <button type="button" id="savePresetBtn" class="btn btn-outline-primary">Save</button>
+          </div>
+        </div>
+      </section>
+      
+      <section class="control-group misc-settings">
+        <div class="d-grid gap-2">
+          <button type="button" id="reset" class="btn btn-secondary">Reset All Settings</button>
+        </div>
+      </section>
+    </form>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-container">
+      <!-- Tabs for Original Image and ASCII View -->
+      <ul class="nav nav-tabs mb-3" id="contentTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="ascii-tab" data-bs-toggle="tab" data-bs-target="#ascii-pane" type="button" role="tab" aria-controls="ascii-pane" aria-selected="true">ASCII Art</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="original-tab" data-bs-toggle="tab" data-bs-target="#original-pane" type="button" role="tab" aria-controls="original-pane" aria-selected="false">Original Image</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="side-by-side-tab" data-bs-toggle="tab" data-bs-target="#side-by-side-pane" type="button" role="tab" aria-controls="side-by-side-pane" aria-selected="false">Side by Side</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-pane" type="button" role="tab" aria-controls="history-pane" aria-selected="false">History</button>
+        </li>
+      </ul>
+      
+      <!-- Tab Content -->
+      <div class="tab-content" id="contentTabsContent">
+        <!-- ASCII Art Tab -->
+        <div class="tab-pane fade show active" id="ascii-pane" role="tabpanel" aria-labelledby="ascii-tab">
+          <pre id="ascii-art" class="ascii-output"></pre>
+        </div>
+        
+        <!-- Original Image Tab -->
+        <div class="tab-pane fade" id="original-pane" role="tabpanel" aria-labelledby="original-tab">
+          <div class="original-image-container">
+            <img id="originalImage" src="" alt="Original image will appear here" class="img-fluid">
+          </div>
+        </div>
+        
+        <!-- Side by Side Tab -->
+        <div class="tab-pane fade" id="side-by-side-pane" role="tabpanel" aria-labelledby="side-by-side-tab">
+          <div class="row">
+            <div class="col-md-6">
+              <h4>Original Image</h4>
+              <img id="sideBySideOriginal" src="" alt="Original image" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+              <h4>ASCII Art</h4>
+              <pre id="sideBySideAscii" class="ascii-output"></pre>
+            </div>
+          </div>
+        </div>
+        
+        <!-- History Tab -->
+        <div class="tab-pane fade" id="history-pane" role="tabpanel" aria-labelledby="history-tab">
+          <div class="history-container">
+            <div class="row" id="historyItems">
+              <!-- History items will be added here by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="button-group mt-4">
+        <button id="copyBtn" class="btn btn-primary">
+          <i class="fas fa-copy"></i> Copy ASCII Art
+        </button>
+        <div class="btn-group">
+          <button id="downloadBtn" class="btn btn-success">
+            <i class="fas fa-download"></i> Download
+          </button>
+          <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" id="downloadPngBtn" href="#">PNG</a></li>
+            <li><a class="dropdown-item" id="downloadTxtBtn" href="#">TXT</a></li>
+            <li><a class="dropdown-item" id="downloadSvgBtn" href="#">SVG</a></li>
+            <li><a class="dropdown-item" id="downloadHtmlBtn" href="#">HTML</a></li>
+          </ul>
+        </div>
+        <button id="shareBtn" class="btn btn-info">
+          <i class="fas fa-share-alt"></i> Share
+        </button>
+      </div>
+      
+      <!-- Keyboard Shortcuts Info -->
+      <div class="keyboard-shortcuts mt-3">
+        <small class="text-muted">
+          Keyboard shortcuts: <kbd>C</kbd> Copy, <kbd>S</kbd> Save, <kbd>R</kbd> Reset, <kbd>H</kbd> Help
+        </small>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Hidden Canvas -->
+<canvas id="canvas" style="display: none;"></canvas>
+
+<!-- Modals -->
+<!-- Help Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="helpModalLabel">ASCII Art Generator Help</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h6>Getting Started</h6>
+        <p>Upload an image or choose a sample image to convert to ASCII art. Adjust the settings to customize the output.</p>
+        
+        <h6>Settings Explained</h6>
+        <ul>
+          <li><strong>Width</strong>: Controls the number of characters in each row.</li>
+          <li><strong>Brightness/Contrast</strong>: Adjust the image before conversion.</li>
+          <li><strong>Dithering</strong>: Simulates more shades by using patterns of dots.</li>
+          <li><strong>Character Sets</strong>: Different sets of characters to use for the conversion.</li>
+          <li><strong>Edge Detection</strong>: Highlights edges in the image using different algorithms.</li>
+        </ul>
+        
+        <h6>Keyboard Shortcuts</h6>
+        <ul>
+          <li><kbd>C</kbd>: Copy ASCII art to clipboard</li>
+          <li><kbd>S</kbd>: Save/download the art</li>
+          <li><kbd>R</kbd>: Reset all settings</li>
+          <li><kbd>H</kbd>: Show this help dialog</li>
+          <li><kbd>1-6</kbd>: Navigate to settings sections</li>
+          <li><kbd>+/-</kbd>: Increase/decrease zoom</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Share Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareModalLabel">Share Your ASCII Art</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Share your creation with others:</p>
+        <div class="input-group mb-3">
+          <input type="text" id="shareUrl" class="form-control" readonly>
+          <button class="btn btn-outline-secondary" type="button" id="copyShareUrlBtn">Copy</button>
+        </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary" id="shareTwitterBtn">
+            <i class="fab fa-twitter"></i> Share on Twitter
+          </button>
+          <button class="btn btn-primary" id="shareFacebookBtn">
+            <i class="fab fa-facebook"></i> Share on Facebook
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Color Settings Modal -->
+<div class="modal fade" id="colorSettingsModal" tabindex="-1" aria-labelledby="colorSettingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="colorSettingsModalLabel">Custom Color Settings</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="bgColor" class="form-label">Background Color</label>
+          <input type="color" class="form-control form-control-color" id="bgColor" value="#000000">
+        </div>
+        <div class="mb-3">
+          <label for="textColor" class="form-label">Text Color</label>
+          <input type="color" class="form-control form-control-color" id="textColor" value="#ffffff">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="applyColorBtn">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap and other JS libraries -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
