@@ -184,12 +184,12 @@ Experience the ASCII Art Generator in action! Visit our official website [ASCII.
 <div align="center">
   <table>
     <tr>
-      <td><img src="https://i.ibb.co/4PXYmtW/ascii-screenshot-1.jpg" alt="Main Interface" width="400"/></td>
-      <td><img src="https://i.ibb.co/p0MHCnC/ascii-screenshot-2.jpg" alt="Side-by-Side View" width="400"/></td>
+      <td><img src="https://pub-7adb411eddd74612a331bb3867d8098b.r2.dev/488079777_957918566546932_6242273117446767250_n.png" alt="Main Interface" width="400"/></td>
+      <td><img src="https://pub-7adb411eddd74612a331bb3867d8098b.r2.dev/Captura%20de%20ecr%C3%A3%202025-04-03%20114114.png" alt="screenshot1" width="400"/></td>
     </tr>
     <tr>
       <td align="center"><em>Main Interface - Dark Mode</em></td>
-      <td align="center"><em>Side-by-Side Comparison View</em></td>
+      <td align="center"><em>screenshot1</em></td>
     </tr>
     <tr>
       <td><img src="https://i.ibb.co/6P3qQSW/ascii-screenshot-3.jpg" alt="Color ASCII Mode" width="400"/></td>
