@@ -207,7 +207,7 @@ The ASCII Art Generator is available online at [ASCII.PT](https://ascii.pt), but
 
 1. **Download the code** from the GitHub repository:
    ```bash
-   git clone https://github.com/your-username/ascii-art-generator.git
+   git clone https://github.com/ESTG-REPO/ascii-art-generator.git
    cd ascii-art-generator
    ```
 
