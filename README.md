@@ -185,7 +185,7 @@ Experience the ASCII Art Generator in action! Visit our official website [ASCII.
   <table>
     <tr>
       <td><img src="https://pub-7adb411eddd74612a331bb3867d8098b.r2.dev/488079777_957918566546932_6242273117446767250_n.png" alt="Main Interface" width="400"/></td>
-      <td><img src="https://pub-7adb411eddd74612a331bb3867d8098b.r2.dev/Captura%20de%20ecr%C3%A3%202025-04-03%20114114.png" alt="screenshot1" width="400"/></td>
+      <td><img src="https://pub-7adb411eddd74612a331bb3867d8098b.r2.dev/ascii_art.png" alt="output1" width="400"/></td>
     </tr>
     <tr>
       <td align="center"><em>Main Interface - Dark Mode</em></td>
