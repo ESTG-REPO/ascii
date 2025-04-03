@@ -191,10 +191,6 @@ Experience the ASCII Art Generator in action! Visit our official website [ASCII.
       <td align="center"><em>Main Interface - Dark Mode</em></td>
       <td align="center"><em>screenshot1</em></td>
     </tr>
-    <tr>
-      <td><img src="https://i.ibb.co/6P3qQSW/ascii-screenshot-3.jpg" alt="Color ASCII Mode" width="400"/></td>
-      <td><img src="https://i.ibb.co/mJjMgwY/ascii-screenshot-4.jpg" alt="Edge Detection" width="400"/></td>
-    </tr>
   </table>
 </div>
 
